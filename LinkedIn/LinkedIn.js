@@ -9,8 +9,12 @@ casper.start('https://www.linkedin.com/uas/login', function () {
 }).wait(5000);
 
 casper.then(function () {
+    this.echo('Open URL', 'INFO')
+})
+
+casper.then(function () {
     this.waitForSelector('#control_gen_2');
-    console.log('"Wait for log in form"', 'INFO');
+    console.log('"Wait for logIn form"', 'INFO');
 });
 
 casper.then(function () {
@@ -25,11 +29,13 @@ casper.then(function () {
         '#session_password-login': 'dobrya4ek'
     }, true);
     this.capture('ScreenShots/111.png')
+    this.echo('Input Email and password', 'INFO')
 });
 
 casper.thenClick('#btn-primary').wait(5000);
 casper.then(function () {
     this.capture('ScreenShots/222.png');
+    this.echo('Click "Sing In" button', 'INFO')
 });
 
 casper.then(function(){
@@ -39,7 +45,7 @@ casper.then(function(){
            this.captere('ScreenShots/4444.png');
        }
     });
-
+    this.echo('Click all "Add to connection" buttons', 'INFO')
 });
 
 casper.run(function () {
