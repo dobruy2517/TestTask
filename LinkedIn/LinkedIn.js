@@ -1,27 +1,47 @@
-/**
- * Created by ihor on 01.11.16.
- */
-var casper = require('casper').create();
-
-casper.start('https://www.linkedin.com/uas/login', function() {
-    this.fillLabels('input#session_key-login', {Email: 'ihor.dobrovolskyi@gmail.com'}, true);
-    casper.capture('ScreenShots/loginPage.png');
-    this.echo('Load login page is successfully', 'INFO');
+var casper = require('casper').create({
+    verbose: true,
+    logLevel: "debug"
 });
 
-casper.then( function() {
+casper.options.timeout = 8000;
+casper.start('https://www.linkedin.com/uas/login', function () {
+    this.waitForSelector('#control_gen_2');
+}).wait(5000);
 
-    this.echo("E-mail is ok",'INFO');
-    casper.capture('ScreenShots/loginPageWithEmail.png');
+casper.then(function () {
+    this.waitForSelector('#control_gen_2');
+    console.log('"Wait for log in form"', 'INFO');
 });
 
-casper.then(function() {
-    this.fillLabels('#login-password', {password: 'dobrya4ek' }, true);
-});
+casper.then(function () {
+    this.capture('ScreenShots/loginPageWithoutEmail.png');
 
-casper.then(function() {
-    this.echo('password is ok');
 });
 
 
-casper.run();
+casper.then(function () {
+    this.fillSelectors('#control_gen_2', {
+        '#session_key-login': 'agat91@i.ua',
+        '#session_password-login': 'dobrya4ek'
+    }, true);
+    this.capture('ScreenShots/111.png')
+});
+
+casper.thenClick('#btn-primary').wait(5000);
+casper.then(function () {
+    this.capture('ScreenShots/222.png');
+});
+
+casper.then(function(){
+    this.evaluate(function () {
+       for (var i=0; i<$('[class="connect add-btn block"]').length(); i++){
+           $('[class="connect add-btn block"]')[i].click();
+           this.captere('ScreenShots/4444.png');
+       }
+    });
+
+});
+
+casper.run(function () {
+    this.echo('"End of test"', 'INFO').exit();
+});
